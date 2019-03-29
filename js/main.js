@@ -17,7 +17,7 @@ $(document).ready(function(){
       console.log($('p.first').text())//输出 整一坨text
 /* attribute selectors */   //这个不知道是什么鬼
 $('a[href="#1"]').css('background-color','tomato')
-$('a[href^="#"]').css('color','green')   // 这个就是重点 ^ 这个东西就把所有包含#的全部都给找到和改
+$('a[href^="#"]').css('color','green')   // 这个就是重点 ^ 这个东西就把所有包含#的全部都给找到和改 这个Css都可以用的
 $('a[href*="google"]').css('font-weight','bold')   //在所有地方将 google这个东西找出来然后更改他。  特别提醒 所有的 .css 的意思并不是说文件后续名字，是后面的那个东西 是什么需要被改变。如果需要研究就看看前面的HTML
 
 
@@ -48,10 +48,42 @@ $('img').bind('click')  // bind?
 
 
 $('img').click(function(){
-  console.log($(this).attr('src'))      //this 就是我最终 点 的那个东西。 无论我点哪个img
+  console.log($(this).attr('src'))      //this 就是我最终 点 的那个东西。 无论我点哪个img ， 【特别重要】 This 这个东西就是最后点的那个东西！！一定要记得！
 $(this).toggleClass('special')
 })
 
+/* AJAX */
+$('#content').load('./about.html')
+$('#contentNav .nav-link').click(function (e) {   //(e) 与 { 之间一定要有空格
+  // console.log(e)// console。 log 拿来检查这个东西是否可行。
+ e.preventDefault()
+ var page = $(this).attr('href')
+ $('#contentNav .active').removeClass('active')
+ $(this).addClass('active')
+ $('#content').fadeOut(500, function () {
+  $(this).load(page)
+}).fadeIn(500)
+
+})//closing click event on the contentNav nav-link
 
 
-});
+// $.ajax('./data/posts/json')//有两个方法弄这个东西，这是输入一个文件的 
+$.ajax({
+url:'./data/posts.json',
+type:'GET',
+dataType:'json'
+})// 用这个可以一次性多输入几个不同的 东西， 例如url
+.done(function (data) {
+var numPosts = data.posts.length
+for (var i = 0; i < numPosts; i++) {
+  var post = '<div class="col-sm-6 p-5"><h3>'
+  post += (i+1) + '.' + data.posts[i].title
+  post += '</h3><p>'
+  post += data.posts[i].body
+  post += '</p></div>'
+  $('#posts').append(post)
+}
+}) //ajax 的结束
+
+
+})//closing the document .ready method and the function
