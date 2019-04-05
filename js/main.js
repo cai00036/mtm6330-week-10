@@ -67,23 +67,29 @@ $('#contentNav .nav-link').click(function (e) {   //(e) 与 { 之间一定要有
 })//closing click event on the contentNav nav-link
 
 
-// $.ajax('./data/posts/json')//有两个方法弄这个东西，这是输入一个文件的 
+// $.ajax('./data/posts/json')//有两个方法弄这个东西，这是输入一个文件的
 $.ajax({
-url:'./data/posts.json',
+// url:'./data/posts.json',
+url:'https://jsonplaceholder.typicode.com/posts',
 type:'GET',
 dataType:'json'
 })// 用这个可以一次性多输入几个不同的 东西， 例如url
 .done(function (data) {
-var numPosts = data.posts.length
+var numPosts = data.length
 for (var i = 0; i < numPosts; i++) {
   var post = '<div class="col-sm-6 p-5"><h3>'
-  post += (i+1) + '.' + data.posts[i].title
+  post += (i+1) + '.' + data[i].title
   post += '</h3><p>'
-  post += data.posts[i].body
+  post += data[i].body
   post += '</p></div>'
   $('#posts').append(post)
 }
 }) //ajax 的结束
+
+AOS.init();
+
+
+
 
 
 })//closing the document .ready method and the function
